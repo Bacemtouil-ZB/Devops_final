@@ -24,16 +24,22 @@ export const getNoteById = async (req, res) => {
 export const createNote = async (req, res) => {
   try {
     const { title, content } = req.body;
+
+    // Validate
+    if (!content || content.trim() === "") {
+      return res.status(400).json({ message: "Content is required" });
+    }
+
     const note = new Note({ title, content });
-    await note.save();
     const savedNote = await note.save();
-    // res.status(201).json({ message: "note created successfully !" });
+
     res.status(201).json(savedNote);
   } catch (error) {
     console.error("error in createNote controller", error);
     res.status(500).json({ message: "internal server error" });
   }
 };
+
 
 export const updateNote = async (req, res) => {
   try {
